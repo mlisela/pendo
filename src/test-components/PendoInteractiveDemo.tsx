@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PendoTestPage } from './PendoTestComponents';
-import type { IPendoVerificationReport } from '../verifyPendoData';
+import type { IPendoVerificationReport } from '../verification/verifyPendoData';
 
 /**
  * Interactive Demo Page for Pendo PII Detection
