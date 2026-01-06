@@ -1,0 +1,69 @@
+name: Pendo Verification
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.ts'
+      - 'src/**/*.tsx'
+      - 'tests/**/*.ts'
+      - 'tests/**/*.tsx'
+      - 'scripts/verify-pendo-ci.js'
+      - 'package.json'
+      - 'tsconfig.json'
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  verify-pendo:
+    name: Verify Pendo Integration
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Pendo Verification
+        id: verify
+        run: |
+          npm run verify
+        continue-on-error: true
+      
+      - name: Comment on PR (Success)
+        if: steps.verify.outcome == 'success' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **Pendo Verification Passed**\n\nAll checks completed successfully:\n- ✓ File existence\n- ✓ TypeScript compilation\n- ✓ Unit tests\n- ✓ Linter checks\n- ✓ Export verification\n- ✓ Development guards\n- ✓ PII pattern coverage\n- ✓ Documentation\n\n🚀 Ready for review!'
+            })
+      
+      - name: Comment on PR (Failure)
+        if: steps.verify.outcome == 'failure' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ **Pendo Verification Failed**\n\nSome checks did not pass. Please review the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.\n\n**Common fixes:**\n- Run `npm run verify` locally\n- Check for TypeScript errors: `npm run type-check`\n- Run tests: `npm test`\n- Ensure all required files exist\n\n💡 Fix the issues and push again to re-run verification.'
+            })
+      
+      - name: Fail workflow if verification failed
+        if: steps.verify.outcome == 'failure'
+        run: exit 1
+

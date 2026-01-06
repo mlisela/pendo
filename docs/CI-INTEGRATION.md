@@ -7,7 +7,7 @@ The Pendo verification utility is now ready for CI/CD integration. All automated
 ## CI Script Location
 
 ```
-application/app/scripts/verify-pendo-ci.js
+scripts/verify-pendo-ci.js
 ```
 
 ## Running the CI Script
@@ -15,8 +15,9 @@ application/app/scripts/verify-pendo-ci.js
 ### Locally
 
 ```bash
-cd application
-node app/scripts/verify-pendo-ci.js
+npm run verify
+# or directly
+node scripts/verify-pendo-ci.js
 ```
 
 ### In CI/CD Pipeline
@@ -26,17 +27,14 @@ Add to your pipeline configuration (e.g., GitHub Actions, GitLab CI, Jenkins):
 ```yaml
 # Example: GitHub Actions
 - name: Verify Pendo Utility
-  run: |
-    cd application
-    node app/scripts/verify-pendo-ci.js
+  run: npm run verify
 ```
 
 ```yaml
 # Example: GitLab CI
 pendo-verification:
   script:
-    - cd application
-    - node app/scripts/verify-pendo-ci.js
+    - npm run verify
 ```
 
 ## What the CI Script Checks
@@ -45,7 +43,7 @@ The script performs 9 comprehensive checks:
 
 ### ✅ 1. File Existence
 - Verifies all required files are present
-- `verifyPendoData.ts`, `verifyPendoData.spec.ts`, `verifyPendoData.md`
+- `src/verification/verifyPendoData.ts`, `tests/verifyPendoData.spec.ts`, `docs/verifyPendoData.md`
 
 ### ✅ 2. TypeScript Compilation
 - Ensures the TypeScript code compiles without errors
@@ -107,123 +105,112 @@ Warnings: 0
 
 ## Integration with Pull Requests
 
-### GitHub Actions Example
+### GitHub Actions
 
-Create `.github/workflows/pendo-verification.yml`:
+The repository includes a complete GitHub Actions workflow at `.github/workflows/pendo-verification.yml`.
 
-```yaml
-name: Pendo Verification
+**Features:**
+- ✅ Runs automatically on pull requests
+- ✅ Triggers on changes to TypeScript files
+- ✅ Posts success/failure comments on PRs
+- ✅ Caches dependencies for faster runs
+- ✅ Blocks merge if verification fails
 
-on:
-  pull_request:
-    paths:
-      - 'application/app/utils/verifyPendoData.ts'
-      - 'application/app/**/*.ts'
-      - 'application/app/**/*.tsx'
+**Setup:**
+1. The workflow file is already committed to the repository
+2. GitHub Actions will run automatically on pull requests
+3. No additional setup required
 
-jobs:
-  verify-pendo:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Run Pendo Verification
-        run: |
-          cd application
-          node app/scripts/verify-pendo-ci.js
-      
-      - name: Comment PR
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '❌ Pendo verification failed. Please review the checks and fix any issues.'
-            })
+**Manual trigger:**
+```bash
+gh workflow run pendo-verification.yml
 ```
 
-### GitLab CI Example
+### GitLab CI
 
-Add to `.gitlab-ci.yml`:
+The repository includes a complete GitLab CI configuration at `.gitlab-ci.yml`.
 
-```yaml
-pendo-verification:
-  stage: test
-  script:
-    - cd application
-    - node app/scripts/verify-pendo-ci.js
-  only:
-    changes:
-      - application/app/utils/verifyPendoData.ts
-      - application/app/**/*.ts
-      - application/app/**/*.tsx
-```
+**Features:**
+- ✅ Runs on merge requests
+- ✅ Parallel test execution
+- ✅ Caches node_modules
+- ✅ Coverage reports
+- ✅ Only runs on relevant file changes
+
+**Setup:**
+1. The `.gitlab-ci.yml` file is already committed
+2. GitLab CI will run automatically on merge requests
+3. No additional setup required
 
 ## Manual Pre-PR Checklist
 
 Before creating a pull request:
 
-1. ✅ Run the CI script locally
+1. ✅ Run the CI script locally: `npm run verify`
 2. ✅ Fix any failures or warnings
 3. ✅ Test in browser console: `window.pendoVerify.scan()`
-4. ✅ Verify no TypeScript errors
-5. ✅ Update documentation if API changes
+4. ✅ Verify no TypeScript errors: `npm run type-check`
+5. ✅ Run all tests: `npm test`
+6. ✅ Update documentation if API changes
 
-## Files Included in PR
+## Project Structure
 
 ```
-application/
-├── app/
-│   ├── pendoInitialize.ts          # Pendo initialization
-│   ├── scripts/
-│   │   └── verify-pendo-ci.js      # CI verification script
-│   └── utils/
-│       ├── verifyPendoData.ts      # Main utility
-│       ├── verifyPendoData.spec.ts # Unit tests
-│       ├── verifyPendoData.md      # Documentation
-│       ├── verifyPendoData.quickref.md  # Quick reference
-│       └── verifyPendoData.checklist.md # Implementation checklist
-└── CI-INTEGRATION.md               # This file
+pendo/
+├── .github/
+│   └── workflows/
+│       └── pendo-verification.yml  # GitHub Actions workflow
+├── .gitlab-ci.yml                  # GitLab CI configuration
+├── .husky/                         # Git hooks (optional)
+│   ├── pre-commit                  # Run before commits
+│   └── pre-push                    # Run before pushes
+├── src/
+│   ├── initialize/
+│   │   └── pendoInitialize.ts      # Pendo initialization
+│   ├── verification/
+│   │   └── verifyPendoData.ts      # Main verification utility
+│   └── test-components/            # React test components
+├── tests/
+│   ├── verifyPendoData.spec.ts     # Unit tests
+│   └── PendoTestComponents.spec.tsx
+├── scripts/
+│   └── verify-pendo-ci.js          # CI verification script
+├── docs/
+│   ├── CI-INTEGRATION.md           # This file
+│   ├── SETUP-HOOKS.md              # Git hooks setup guide
+│   ├── verifyPendoData.md          # Complete documentation
+│   └── verifyPendoData.quickref.md # Quick reference
+└── package.json
 ```
 
 ## Quick Reference Commands
 
 ```bash
-# Run CI checks
-cd application && node app/scripts/verify-pendo-ci.js
+# Run CI verification
+npm run verify
 
 # Check TypeScript
 npm run type-check
 
 # Run unit tests
-npm run test:only -- app/utils/verifyPendoData.spec.ts
+npm test
 
-# Lint files
-npx eslint app/utils/verifyPendoData.ts
+# Run specific test file
+npm run test:only -- tests/verifyPendoData.spec.ts
+
+# Lint files (if configured)
+npm run lint
 ```
 
 ## Troubleshooting
 
 ### CI Script Fails to Find Files
 
-**Issue:** `app/utils/verifyPendoData.ts missing`
+**Issue:** `src/verification/verifyPendoData.ts missing`
 
-**Solution:** Ensure you're running the script from the `application` directory:
+**Solution:** Ensure you're running the script from the project root:
 ```bash
-cd application
-node app/scripts/verify-pendo-ci.js
+npm run verify
 ```
 
 ### TypeScript Compilation Errors
@@ -231,6 +218,9 @@ node app/scripts/verify-pendo-ci.js
 **Issue:** `npm run type-check` fails
 
 **Solution:** Check for TypeScript errors in your IDE and fix them before running CI
+```bash
+npm run type-check
+```
 
 ### Unit Tests Fail
 
@@ -238,25 +228,63 @@ node app/scripts/verify-pendo-ci.js
 
 **Solution:** Run tests locally to debug:
 ```bash
-npm run test:only -- app/utils/verifyPendoData.spec.ts --verbose
+npm run test:only -- tests/verifyPendoData.spec.ts --verbose
 ```
+
+### Git Hooks Not Running
+
+**Issue:** Pre-commit or pre-push hooks don't execute
+
+**Solution:** 
+1. Check if hooks are executable: `ls -la .husky/`
+2. Make them executable: `chmod +x .husky/pre-commit .husky/pre-push`
+3. See [SETUP-HOOKS.md](SETUP-HOOKS.md) for detailed setup
+
+## Git Hooks (Optional but Recommended)
+
+You can set up Git hooks to run verification checks before commits and pushes. This catches issues early before they reach CI.
+
+**See [SETUP-HOOKS.md](SETUP-HOOKS.md) for detailed setup instructions.**
+
+Quick setup with Husky:
+```bash
+npm install --save-dev husky
+npx husky init
+chmod +x .husky/pre-commit .husky/pre-push
+```
+
+## CI/CD Best Practices
+
+1. **Run checks locally first:** Always run `npm run verify` before pushing
+2. **Fix issues immediately:** Don't push code that fails verification
+3. **Monitor CI status:** Check GitHub Actions / GitLab CI results
+4. **Keep dependencies updated:** Run `npm update` regularly
+5. **Review failed checks:** Read CI logs to understand failures
+
+## Integration Status
+
+| Platform | Status | Configuration File | Runs On |
+|----------|--------|-------------------|---------|
+| GitHub Actions | ✅ Ready | `.github/workflows/pendo-verification.yml` | Pull requests, push to main |
+| GitLab CI | ✅ Ready | `.gitlab-ci.yml` | Merge requests, push to main |
+| Git Hooks | 📦 Optional | `.husky/pre-commit`, `.husky/pre-push` | Commit, push |
 
 ## Support
 
 For questions about the CI integration:
-- Review the inline comments in `verify-pendo-ci.js`
-- Check the documentation in `verifyPendoData.md`
-- Contact the frontend team
+- Review the inline comments in `scripts/verify-pendo-ci.js`
+- Check the documentation in `docs/verifyPendoData.md`
+- See [SETUP-HOOKS.md](SETUP-HOOKS.md) for Git hooks setup
+- Review workflow files for CI/CD configuration
 
-## Next Steps
+## Additional Documentation
 
-1. ✅ Create pull request with these changes
-2. ✅ CI script will run automatically (once integrated)
-3. ✅ Review and merge once all checks pass
-4. ✅ Deploy to development environment
-5. ✅ Test with `window.pendoVerify.scan()`
+- [Complete Verification Guide](verifyPendoData.md)
+- [Quick Reference](verifyPendoData.quickref.md)
+- [Git Hooks Setup](SETUP-HOOKS.md)
+- [Test Components](test-components-README.md)
 
 ---
 
-**Status:** Ready for pull request ✨
+**Status:** ✅ Fully integrated and ready for use!
 

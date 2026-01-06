@@ -1,0 +1,71 @@
+# GitLab CI/CD Configuration for Pendo Verification
+
+stages:
+  - test
+  - verify
+
+# Cache node_modules for faster builds
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+# Install dependencies
+install:
+  stage: .pre
+  script:
+    - npm ci
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+# Run Pendo verification checks
+pendo-verification:
+  stage: verify
+  script:
+    - echo "Running Pendo verification checks..."
+    - npm run verify
+  only:
+    refs:
+      - merge_requests
+      - main
+      - develop
+    changes:
+      - src/**/*.ts
+      - src/**/*.tsx
+      - tests/**/*.ts
+      - tests/**/*.tsx
+      - scripts/verify-pendo-ci.js
+      - package.json
+      - tsconfig.json
+  allow_failure: false
+  artifacts:
+    reports:
+      junit: test-results.xml
+    when: always
+
+# Run unit tests
+unit-tests:
+  stage: test
+  script:
+    - npm run test
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    when: always
+
+# TypeScript type checking
+type-check:
+  stage: test
+  script:
+    - npm run type-check
+  only:
+    refs:
+      - merge_requests
+      - main
+      - develop
+
