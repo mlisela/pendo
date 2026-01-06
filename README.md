@@ -16,7 +16,6 @@ A comprehensive development-only utility for detecting PII (Personally Identifia
 ### Installation
 
 ```bash
-cd application
 npm install
 ```
 
@@ -39,7 +38,7 @@ window.pendoVerify.highlight(report);
 #### Programmatic Usage
 
 ```typescript
-import { generatePendoReport } from './utils/verifyPendoData';
+import { generatePendoReport } from './src/verification/verifyPendoData';
 
 const report = generatePendoReport();
 if (!report.summary.passed) {
@@ -50,37 +49,43 @@ if (!report.summary.passed) {
 ### Run CI Verification
 
 ```bash
-cd application
 npm run verify
 ```
 
 ## Project Structure
 
 ```
-application/
-├── app/
-│   ├── pendoInitialize.ts              # Pendo initialization
-│   ├── scripts/
-│   │   └── verify-pendo-ci.js          # CI verification script
-│   └── utils/
-│       ├── verifyPendoData.ts          # Core verification utility
-│       ├── verifyPendoData.spec.ts     # Unit tests
-│       └── test-components/            # React test components
-│           ├── PendoTestComponents.tsx       # 25 test components
-│           ├── PendoTestComponents.spec.tsx  # 34+ test cases
-│           ├── PendoInteractiveDemo.tsx      # Interactive demo UI
-│           └── README.md                     # Component docs
+pendo/
+├── src/                                    # Source code
+│   ├── initialize/
+│   │   └── pendoInitialize.ts             # Pendo initialization
+│   ├── verification/
+│   │   └── verifyPendoData.ts             # Core verification utility
+│   └── test-components/                   # React test components
+│       ├── PendoTestComponents.tsx        # 25 test components
+│       ├── PendoInteractiveDemo.tsx       # Interactive demo UI
+│       └── index.ts                       # Component exports
+├── tests/                                 # Test files
+│   ├── verifyPendoData.spec.ts           # Unit tests
+│   └── PendoTestComponents.spec.tsx      # 34+ test cases
+├── scripts/                               # Utility scripts
+│   └── verify-pendo-ci.js                # CI verification script
+├── docs/                                  # Documentation
+│   ├── verifyPendoData.md                # Complete guide
+│   ├── verifyPendoData.quickref.md       # Quick reference
+│   ├── test-components-README.md         # Component docs
+│   └── CI-INTEGRATION.md                 # CI/CD setup
 ├── package.json
 ├── tsconfig.json
-└── CI-INTEGRATION.md
+└── README.md
 ```
 
 ## Documentation
 
-- **[Complete Guide](application/app/utils/verifyPendoData.md)** - Full documentation
-- **[Quick Reference](application/app/utils/verifyPendoData.quickref.md)** - Quick start guide
-- **[Test Components](application/app/utils/test-components/README.md)** - Test component documentation
-- **[CI Integration](application/CI-INTEGRATION.md)** - CI/CD setup guide
+- **[Complete Guide](docs/verifyPendoData.md)** - Full documentation
+- **[Quick Reference](docs/verifyPendoData.quickref.md)** - Quick start guide
+- **[Test Components](docs/test-components-README.md)** - Test component documentation
+- **[CI Integration](docs/CI-INTEGRATION.md)** - CI/CD setup guide
 
 ## PII Patterns Detected
 
@@ -121,7 +126,6 @@ Includes 25 React components for testing:
 ```yaml
 - name: Verify Pendo
   run: |
-    cd application
     npm install
     npm run verify
 ```
@@ -131,7 +135,6 @@ Includes 25 React components for testing:
 ```yaml
 pendo-verification:
   script:
-    - cd application
     - npm install
     - npm run verify
 ```
