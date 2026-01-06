@@ -341,6 +341,31 @@ ls -la .github/workflows/ # or .gitlab-ci.yml
 # Ensure Actions/CI is enabled in settings
 ```
 
+### Problem: "Resource not accessible by integration"
+
+**This is a GitHub Actions permissions error.**
+
+**Quick Fix - Use Simple Workflow:**
+```bash
+# Rename the complex workflow
+mv .github/workflows/pendo-verification.yml .github/workflows/pendo-verification-with-comments.yml.bak
+
+# Use the simple workflow instead
+mv .github/workflows/pendo-verification-simple.yml .github/workflows/pendo-verification.yml
+
+git add .github/workflows/
+git commit -m "ci: Use simple workflow without PR comments"
+git push
+```
+
+The simple workflow:
+- ✅ Runs all verification checks
+- ✅ Shows pass/fail status on PR  
+- ✅ No permissions configuration needed
+- ❌ Doesn't post PR comments (but you can see full logs in "Details")
+
+**See [GitHub Actions Troubleshooting Guide](GITHUB-ACTIONS-TROUBLESHOOTING.md) for complete solutions.**
+
 ### Problem: All Checks Fail
 
 **Solution:**
