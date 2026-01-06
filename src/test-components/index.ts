@@ -50,5 +50,5 @@ export type {
     IPIIIssue,
     IPendoExclusionIssue,
     IPendoVerificationReport,
-} from '../verifyPendoData';
+} from '../verification/verifyPendoData';
 

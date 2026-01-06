@@ -9,7 +9,7 @@
     "allowJs": true,
     "checkJs": false,
     "outDir": "./dist",
-    "rootDir": "./app",
+    "rootDir": "./src",
     "removeComments": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -27,10 +27,16 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": [
-    "app/**/*"
+    "src/**/*",
+    "tests/**/*",
+    "scripts/**/*"
   ],
   "exclude": [
     "node_modules",

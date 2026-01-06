@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { generatePendoReport, scanForPII, verifyPendoExclusions } from '../verifyPendoData';
+import { generatePendoReport, scanForPII, verifyPendoExclusions } from '../src/verification/verifyPendoData';
 import {
     BadEmailInAttribute,
     BadPhoneInClass,
@@ -20,7 +20,7 @@ import {
     EdgeCaseVersionNumber,
     EdgeCasePostalCodes,
     PendoTestPage,
-} from './PendoTestComponents';
+} from '../src/test-components/PendoTestComponents';
 
 describe('Pendo PII Detection - Bad Examples', () => {
     

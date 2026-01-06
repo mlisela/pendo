@@ -1,4 +1,4 @@
-import * as pendoUtils from "./verifyPendoData";
+import * as pendoUtils from "../src/verification/verifyPendoData";
 
 describe("verifyPendoData - DOM Scanner for PII and Exclusions", () => {
     let container: HTMLElement;
