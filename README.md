@@ -82,10 +82,13 @@ pendo/
 
 ## Documentation
 
+**📚 [Complete Documentation Index](docs/INDEX.md)** - Find all documentation organized by topic
+
 ### Getting Started
-- **[How to Enable PR CI](docs/HOW-TO-ENABLE-PR-CI.md)** - Enable automated verification on pull requests ⭐
+- **[Visual Overview](docs/VISUAL-OVERVIEW.md)** - Diagrams and visual explanations 📊
+- **[How It Works](docs/HOW-IT-WORKS.md)** - Complete technical explanation ⭐
+- **[How to Enable PR CI](docs/HOW-TO-ENABLE-PR-CI.md)** - Enable automated verification on pull requests
 - **[Git Integration Quick Start](docs/GIT-INTEGRATION-QUICKSTART.md)** - Quick setup guide for Git workflows
-- **[Files Created Summary](docs/FILES-CREATED-SUMMARY.md)** - Overview of all CI/CD files
 
 ### Detailed Guides  
 - **[Complete Guide](docs/verifyPendoData.md)** - Full documentation
@@ -93,6 +96,9 @@ pendo/
 - **[Test Components](docs/test-components-README.md)** - Test component documentation
 - **[CI Integration](docs/CI-INTEGRATION.md)** - CI/CD setup guide
 - **[Setup Hooks](docs/SETUP-HOOKS.md)** - Git hooks configuration
+
+### Troubleshooting
+- **[GitHub Actions Troubleshooting](docs/GITHUB-ACTIONS-TROUBLESHOOTING.md)** - Fix common GitHub Actions issues
 
 ## PII Patterns Detected
 
