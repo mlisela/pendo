@@ -18,6 +18,9 @@ export {
     BadUnexcludedForm,
     BadBankAccountInPlaceholder,
     BadIBANInAlt,
+    BadClientIdInData,
+    BadUserIdInTracking,
+    BadISINInTitle,
     
     // Good Examples (properly excluded)
     GoodEmailExcluded,
@@ -36,6 +39,7 @@ export {
     EdgeCaseDynamicContent,
     EdgeCaseAWSKey,
     EdgeCasePostalCodes,
+    EdgeCaseMultipleIDs,
     
     // Composite test page
     PendoTestPage,

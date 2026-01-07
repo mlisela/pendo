@@ -491,7 +491,7 @@ describe("verifyPendoData - DOM Scanner for PII and Exclusions", () => {
 
             // Re-require the module to trigger the window assignment
             jest.resetModules();
-            require("./verifyPendoData");
+            require("../src/verification/verifyPendoData");
 
             expect((window as any).pendoVerify).toBeDefined();
 

@@ -156,6 +156,40 @@ export const BadIBANInAlt = (): JSX.Element => {
     );
 };
 
+/**
+ * BAD: Client ID exposed in data attribute
+ */
+export const BadClientIdInData = (): JSX.Element => {
+    return (
+        <div data-pendo-id="client-section" data-client-id="client_id=87654321">
+            <h3>Client Dashboard</h3>
+            <p>View client details</p>
+        </div>
+    );
+};
+
+/**
+ * BAD: User ID exposed in tracking attribute
+ */
+export const BadUserIdInTracking = (): JSX.Element => {
+    return (
+        <div data-pendo="user_id=12345678">
+            <span>User Dashboard</span>
+        </div>
+    );
+};
+
+/**
+ * BAD: ISIN code in title attribute
+ */
+export const BadISINInTitle = (): JSX.Element => {
+    return (
+        <button title="Security: US0378331005" data-pendo-id="stock-button">
+            View Stock Details
+        </button>
+    );
+};
+
 // ============================================================================
 // GOOD EXAMPLES - Properly excluded from Pendo tracking
 // ============================================================================
@@ -405,6 +439,19 @@ export const EdgeCasePostalCodes = (): JSX.Element => {
     );
 };
 
+/**
+ * EDGE CASE: Multiple ID types in excluded container
+ */
+export const EdgeCaseMultipleIDs = (): JSX.Element => {
+    return (
+        <div data-pendo-ignore>
+            <p data-client-id="client_id=11223344">Client Information</p>
+            <p data-user-id="user_id=55667788">User Details</p>
+            <p title="ISIN: GB0002374006">Stock Portfolio</p>
+        </div>
+    );
+};
+
 // ============================================================================
 // COMPOSITE TEST COMPONENT
 // ============================================================================
@@ -446,6 +493,21 @@ export const PendoTestPage = (): JSX.Element => {
                     <h3>API Key in Title</h3>
                     <BadAPIKeyInTitle />
                 </div>
+                
+                <div style={{ border: '2px solid red', padding: '10px', margin: '10px 0' }}>
+                    <h3>Client ID in Data</h3>
+                    <BadClientIdInData />
+                </div>
+                
+                <div style={{ border: '2px solid red', padding: '10px', margin: '10px 0' }}>
+                    <h3>User ID in Tracking</h3>
+                    <BadUserIdInTracking />
+                </div>
+                
+                <div style={{ border: '2px solid red', padding: '10px', margin: '10px 0' }}>
+                    <h3>ISIN in Title</h3>
+                    <BadISINInTitle />
+                </div>
             </section>
             
             <section>
@@ -486,6 +548,11 @@ export const PendoTestPage = (): JSX.Element => {
                 <div style={{ border: '2px solid orange', padding: '10px', margin: '10px 0' }}>
                     <h3>Nested Exclusions</h3>
                     <EdgeCaseNestedExclusions />
+                </div>
+                
+                <div style={{ border: '2px solid orange', padding: '10px', margin: '10px 0' }}>
+                    <h3>Multiple IDs (Excluded)</h3>
+                    <EdgeCaseMultipleIDs />
                 </div>
             </section>
             

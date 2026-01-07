@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run Pendo verification before commit
+echo "🔍 Running Pendo verification checks..."
+npm run verify
+
+if [ $? -ne 0 ]; then
+  echo "❌ Pendo verification failed. Commit blocked."
+  echo "💡 Fix the issues and try again."
+  exit 1
+fi
+
+echo "✅ Pendo verification passed!"
+

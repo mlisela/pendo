@@ -82,10 +82,23 @@ pendo/
 
 ## Documentation
 
+**📚 [Complete Documentation Index](docs/INDEX.md)** - Find all documentation organized by topic
+
+### Getting Started
+- **[Visual Overview](docs/VISUAL-OVERVIEW.md)** - Diagrams and visual explanations 📊
+- **[How It Works](docs/HOW-IT-WORKS.md)** - Complete technical explanation ⭐
+- **[How to Enable PR CI](docs/HOW-TO-ENABLE-PR-CI.md)** - Enable automated verification on pull requests
+- **[Git Integration Quick Start](docs/GIT-INTEGRATION-QUICKSTART.md)** - Quick setup guide for Git workflows
+
+### Detailed Guides  
 - **[Complete Guide](docs/verifyPendoData.md)** - Full documentation
 - **[Quick Reference](docs/verifyPendoData.quickref.md)** - Quick start guide
 - **[Test Components](docs/test-components-README.md)** - Test component documentation
 - **[CI Integration](docs/CI-INTEGRATION.md)** - CI/CD setup guide
+- **[Setup Hooks](docs/SETUP-HOOKS.md)** - Git hooks configuration
+
+### Troubleshooting
+- **[GitHub Actions Troubleshooting](docs/GITHUB-ACTIONS-TROUBLESHOOTING.md)** - Fix common GitHub Actions issues
 
 ## PII Patterns Detected
 
@@ -123,21 +136,38 @@ Includes 25 React components for testing:
 
 ### GitHub Actions
 
+The repository includes a complete GitHub Actions workflow that automatically runs on pull requests:
+
 ```yaml
-- name: Verify Pendo
-  run: |
-    npm install
-    npm run verify
+# Automatically runs on PRs - no setup required!
+- ✅ Verifies all TypeScript files
+- ✅ Runs tests
+- ✅ Posts PR comments with results
+- ✅ Blocks merge if checks fail
 ```
 
 ### GitLab CI
 
+Complete GitLab CI configuration included:
+
 ```yaml
-pendo-verification:
-  script:
-    - npm install
-    - npm run verify
+# Automatically runs on merge requests
+- ✅ Parallel test execution
+- ✅ Coverage reports
+- ✅ Caches dependencies
 ```
+
+### Quick Start
+
+```bash
+# Test locally before pushing
+npm run verify
+
+# Optional: Set up Git hooks
+npm run setup:hooks
+```
+
+**See [Git Integration Quick Start](docs/GIT-INTEGRATION-QUICKSTART.md) for complete setup.**
 
 ## Quality Metrics
 
@@ -167,3 +197,4 @@ MIT
 ## Author
 
 Created for Pendo analytics verification and PII protection.
+# Test CI Integration

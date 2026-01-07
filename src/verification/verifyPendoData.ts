@@ -396,7 +396,15 @@ export function verifyPendoExclusions(rootElement: Document | Element = document
  */
 export function verifyDataAttributeExclusions(rootElement: Document | Element = document): IPendoExclusionIssue[] {
     const issues: IPendoExclusionIssue[] = [];
-    const sensitiveDataAttributes = ["data-user-id", "data-email", "data-token", "data-api-key"];
+    const sensitiveDataAttributes = [
+        "data-user-id",
+        "data-client-id",
+        "data-email",
+        "data-token",
+        "data-api-key",
+        "data-isin",
+        "data-account-id",
+    ];
 
     sensitiveDataAttributes.forEach((attr) => {
         const elements = rootElement.querySelectorAll(`[${attr}]`);
